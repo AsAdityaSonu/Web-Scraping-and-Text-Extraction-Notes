@@ -19,14 +19,22 @@ soup = BeautifulSoup(response.text, 'html.parser')
 text = soup.get_text()
 # print(text)
 
-# Finding specific device
+# List all mobile phones 
+import re
+
 start_word = "Add to Compare"
 end_word = "("
-start_index = text.find(start_word)
-end_index = text.find(end_word, start_index + len(start_word))
-name = ''
-if start_index != -1 and end_index != -1:
-    name = text[start_index + len(start_word):end_index].strip()
+
+escaped_start_word = re.escape(start_word)
+escaped_end_word = re.escape(end_word)
+
+pattern = f"{escaped_start_word}(.*?){escaped_end_word}"
+matches = re.finditer(pattern, text)
+name = []
+
+for match in matches:
+    project = match.group(1).strip()
+    name.append(project)
 
 print(name)
 
